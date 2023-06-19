@@ -76,12 +76,13 @@ Function Get-PatchdataFromMicrosoft {
                 $PatchType = $string[2]
                 } else {$PatchType = "Patch Tuesday"}
             $hash = [ordered]@{
-                KBDate    = get-date $string[0]
                 KB        = $string[1].replace(" ","")
-                Build     = [version]$build
-                PatchType = $PatchType
+                Date      = get-date $string[0]
                 ClientOS  = $ClientOS
                 ServerOS  = $ServerOS
+                Build     = [version]$build
+                PatchType = $PatchType
+
             }
             $result += New-Object PSObject -Property $hash
         }
