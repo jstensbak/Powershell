@@ -70,6 +70,7 @@ Function Get-PatchdataFromMicrosoft {
                 20348 {$ServerOS = "Windows Server 2022" } 
                 22000 {$ClientOS = "Windows 11 21H2"     } 
                 22621 {$ClientOS = "Windows 11 22H2"     }
+                22631 {$ClientOS = "Windows 11 23H2"     }
                 }
             $string = ($string.replace($([regex]::Matches($string, '\((.*?)\)').Value),";").replace("—",";").replace(" ; ",";").replace(" ;",";")).split(";")
             if ($string[2]){
