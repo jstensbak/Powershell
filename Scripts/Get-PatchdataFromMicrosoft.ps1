@@ -22,6 +22,8 @@ Function Get-PatchdataFromMicrosoft {
     Version 1.1
         Fixed freeze from using internal IE-parsing in Invoke-WebRequest. Uses -usebasicparsing and selects "supLeftNavLink" class and removes irrelevant information without using IE-engine.
         Should now be Powershell 7+-compatible.
+    Version 1.1.1
+        Added Windows Server 23H2 and Windows 11 23H2
     #>
     $OldProgressPreference = $ProgressPreference
     $ProgressPreference = "SilentlyContinue"
