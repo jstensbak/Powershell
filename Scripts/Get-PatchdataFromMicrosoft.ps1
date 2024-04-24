@@ -26,7 +26,8 @@ Function Get-PatchdataFromMicrosoft {
     $OldProgressPreference = $ProgressPreference
     $ProgressPreference = "SilentlyContinue"
     $URIs = @("https://support.microsoft.com/en-us/topic/windows-10-update-history-857b8ccb-71e4-49e5-b3f6-7073197d98fb",          # Windows 10 / Server 2016 / 2019
-            "https://support.microsoft.com/en-gb/topic/windows-server-2022-update-history-e1caa597-00c5-4ab9-9f3e-8212fe80b2ee", # Windows Server 2022 
+            "https://support.microsoft.com/en-gb/topic/windows-server-2022-update-history-e1caa597-00c5-4ab9-9f3e-8212fe80b2ee", # Windows Server 2022
+            "https://support.microsoft.com/en-gb/topic/windows-server-version-23h2-update-history-68c851ff-825a-4dbc-857b-51c5aa0ab248", # Windows Server 23H2
             "https://support.microsoft.com/en-us/topic/windows-11-update-history-a19cd327-b57f-44b9-84e0-26ced7109ba9")          # Windows 11)
     $MSOutput = @()
     foreach ($URI in $URIs){
@@ -71,6 +72,7 @@ Function Get-PatchdataFromMicrosoft {
                 22000 {$ClientOS = "Windows 11 21H2"     } 
                 22621 {$ClientOS = "Windows 11 22H2"     }
                 22631 {$ClientOS = "Windows 11 23H2"     }
+                25398 {$ServerOS = "Windows Server 23H2" }
                 }
             $string = ($string.replace($([regex]::Matches($string, '\((.*?)\)').Value),";").replace("—",";").replace(" ; ",";").replace(" ;",";")).split(";")
             if ($string[2]){
