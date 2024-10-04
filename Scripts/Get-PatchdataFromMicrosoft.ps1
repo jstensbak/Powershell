@@ -16,6 +16,8 @@ Function Get-PatchdataFromMicrosoft {
             Builds = 17763.2452
             Type = Patch Tuesday
                 
+    Version 1.2.1
+        Added Windows 11 24H2
     Version 1.2
         Fixed output where the original string contained "and" or ",", which resulted in builds being bunched together.
         Should also not output duplicates any more
@@ -74,6 +76,7 @@ Function Get-PatchdataFromMicrosoft {
                 22000 {$ClientOS = "Windows 11 21H2"     } 
                 22621 {$ClientOS = "Windows 11 22H2"     }
                 22631 {$ClientOS = "Windows 11 23H2"     }
+                26100 {$ClientOS = "Windows 11 24H2"     }
                 25398 {$ServerOS = "Windows Server 23H2" }
                 }
             $string = ($string.replace($([regex]::Matches($string, '\((.*?)\)').Value),";").replace("—",";").replace(" ; ",";").replace(" ;",";")).split(";")
