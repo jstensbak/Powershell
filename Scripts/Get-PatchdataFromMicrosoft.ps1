@@ -32,7 +32,8 @@ Function Get-PatchdataFromMicrosoft {
     $URIs = @("https://support.microsoft.com/en-us/topic/windows-10-update-history-857b8ccb-71e4-49e5-b3f6-7073197d98fb",          # Windows 10 / Server 2016 / 2019
             "https://support.microsoft.com/en-gb/topic/windows-server-2022-update-history-e1caa597-00c5-4ab9-9f3e-8212fe80b2ee", # Windows Server 2022
             "https://support.microsoft.com/en-gb/topic/windows-server-version-23h2-update-history-68c851ff-825a-4dbc-857b-51c5aa0ab248", # Windows Server 23H2
-            "https://support.microsoft.com/en-us/topic/windows-11-update-history-a19cd327-b57f-44b9-84e0-26ced7109ba9")          # Windows 11)
+            "https://support.microsoft.com/en-us/topic/windows-11-update-history-a19cd327-b57f-44b9-84e0-26ced7109ba9", # Windows 11
+            "https://support.microsoft.com/en-us/topic/windows-server-2025-update-history-10f58da7-e57b-4a9d-9c16-9f1dcd72d7d7") # Windows Server 2025
     $MSOutput = @()
     foreach ($URI in $URIs){
         $result = Invoke-WebRequest -Uri $URI -UseBasicParsing
@@ -58,13 +59,13 @@ Function Get-PatchdataFromMicrosoft {
                 10240 {$ClientOS = "Windows 10 1507"     }
                 10586 {$ClientOS = "Windows 10 1511"     }
                 14393 {$ClientOS = "Windows 10 1607"
-                    $ServerOS = "Windows Server 2016" }
+                       $ServerOS = "Windows Server 2016" }
                 15063 {$ClientOS = "Windows 10 1703"     }
                 15254 {$ClientOS = "Windows 10 Mobile"   }
                 16299 {$ClientOS = "Windows 10 1709"     }
                 17134 {$ClientOS = "Windows 10 1803"     }
                 17763 {$ServerOS = "Windows Server 2019"
-                    $ClientOS = "Windows 10 1809"     } 
+                       $ClientOS = "Windows 10 1809"     } 
                 18362 {$ClientOS = "Windows 10 1903"     }
                 18363 {$ClientOS = "Windows 10 1909"     }
                 19041 {$ClientOS = "Windows 10 2004"     }
@@ -76,7 +77,8 @@ Function Get-PatchdataFromMicrosoft {
                 22000 {$ClientOS = "Windows 11 21H2"     } 
                 22621 {$ClientOS = "Windows 11 22H2"     }
                 22631 {$ClientOS = "Windows 11 23H2"     }
-                26100 {$ClientOS = "Windows 11 24H2"     }
+                26100 {$ClientOS = "Windows 11 24H2"
+                        $ServerOS = "Windows Server 2025"}
                 25398 {$ServerOS = "Windows Server 23H2" }
                 }
             $string = ($string.replace($([regex]::Matches($string, '\((.*?)\)').Value),";").replace("—",";").replace(" ; ",";").replace(" ;",";")).split(";")
