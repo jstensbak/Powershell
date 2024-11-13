@@ -28,6 +28,8 @@ Function Get-PatchdataFromMicrosoft {
         Added Windows Server 23H2 and Windows 11 23H2
     Version 1.1.2
         Added Windows Server 2025 and Windows 11 24H2
+    Version 1.1.3
+        Use endoflife.date API to get name and EOL for Windows and Windows Server
     #>
     $OldProgressPreference = $ProgressPreference
     $ProgressPreference = "SilentlyContinue"
@@ -49,40 +51,36 @@ Function Get-PatchdataFromMicrosoft {
         }
         
     }
+    $eolresult = @()
+    $ClientEOL = "https://endoflife.date/api/windows.json"
+    $serverEOL = "https://endoflife.date/api/windows-server.json"
+    $ClientEOLData = (Invoke-RestMethod -Uri $ClientEOL) | ? {$_.cycle -like "*-e"}
+    $ServerEOLData = Invoke-RestMethod -Uri $serverEOL
+    foreach ($c in $ClientEOLData) {
+        $eolresult += [PSCustomObject]@{
+            name = "Windows $(($c.releaselabel).replace(' (E)',''))"
+            build = ([version]$($c.latest)).Build
+            support = $c.support
+            eol = $c.eol
+            type = "ClientOS"
+        }
+    }
+    foreach ($s in $ServerEOLData) {
+        $eolresult += [PSCustomObject]@{
+            name = "Windows Server $($s.cycle)"
+            build = ([version]$($s.latest)).Build
+            support = $s.support
+            eol = $s.eol
+            type = "ServerOS"
+        }
+    }
     $result = @()
     foreach ($string in $MSOutput){
     $builds = (([regex]::Matches($string, '\((.*?)\)').Value).replace("OS Build OS ","").replace("OS Builds ","").replace("OS Build ","").replace("(","").replace(")","").replace(", ",";").replace(" and ",";").replace("and ","")).split(";")
 
         foreach($build in $builds){
-            $ClientOS = $null
-            $ServerOS = $null
-            switch (([version]$build).major)
-            { 
-                10240 {$ClientOS = "Windows 10 1507"     }
-                10586 {$ClientOS = "Windows 10 1511"     }
-                14393 {$ClientOS = "Windows 10 1607"
-                       $ServerOS = "Windows Server 2016" }
-                15063 {$ClientOS = "Windows 10 1703"     }
-                15254 {$ClientOS = "Windows 10 Mobile"   }
-                16299 {$ClientOS = "Windows 10 1709"     }
-                17134 {$ClientOS = "Windows 10 1803"     }
-                17763 {$ServerOS = "Windows Server 2019"
-                       $ClientOS = "Windows 10 1809"     } 
-                18362 {$ClientOS = "Windows 10 1903"     }
-                18363 {$ClientOS = "Windows 10 1909"     }
-                19041 {$ClientOS = "Windows 10 2004"     }
-                19042 {$ClientOS = "Windows 10 20H2"     }
-                19043 {$ClientOS = "Windows 10 21H1"     }
-                19044 {$ClientOS = "Windows 10 21H2"     }
-                19045 {$ClientOS = "Windows 10 22H2"     }
-                20348 {$ServerOS = "Windows Server 2022" } 
-                22000 {$ClientOS = "Windows 11 21H2"     } 
-                22621 {$ClientOS = "Windows 11 22H2"     }
-                22631 {$ClientOS = "Windows 11 23H2"     }
-                26100 {$ClientOS = "Windows 11 24H2"
-                        $ServerOS = "Windows Server 2025"}
-                25398 {$ServerOS = "Windows Server 23H2" }
-                }
+            $ClientOS = ($eolresult | Where-Object { $_.build -eq ([version]$build).major} | Where-Object {$_.type -eq "ClientOS"}).name | select -last 1
+            $ServerOS = ($eolresult | Where-Object { $_.build -eq ([version]$build).major} | Where-Object {$_.type -eq "ServerOS"}).name | select -last 1
             $string = ($string.replace($([regex]::Matches($string, '\((.*?)\)').Value),";").replace("—",";").replace(" ; ",";").replace(" ;",";")).split(";")
             if ($string[2]){
                 $PatchType = $string[2]
