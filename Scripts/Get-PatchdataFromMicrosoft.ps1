@@ -26,6 +26,8 @@ Function Get-PatchdataFromMicrosoft {
         Should now be Powershell 7+-compatible.
     Version 1.1.1
         Added Windows Server 23H2 and Windows 11 23H2
+    Version 1.1.2
+        Added Windows Server 2025 and Windows 11 24H2
     #>
     $OldProgressPreference = $ProgressPreference
     $ProgressPreference = "SilentlyContinue"
