@@ -54,7 +54,7 @@ Function Get-PatchdataFromMicrosoft {
     $eolresult = @()
     $ClientEOL = "https://endoflife.date/api/windows.json"
     $serverEOL = "https://endoflife.date/api/windows-server.json"
-    $ClientEOLData = (Invoke-RestMethod -Uri $ClientEOL) | ? {$_.cycle -like "*-e"}
+    $ClientEOLData = (Invoke-RestMethod -Uri $ClientEOL) | ? {$_.cycle -notlike "*-lts"} | ? {$_.cycle -notlike "*-w"} | ? {$_.cycle -notlike "*iot*"}
     $ServerEOLData = Invoke-RestMethod -Uri $serverEOL
     foreach ($c in $ClientEOLData) {
         $eolresult += [PSCustomObject]@{
