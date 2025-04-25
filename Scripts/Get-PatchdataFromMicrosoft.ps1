@@ -163,7 +163,7 @@ Function Get-PatchdataFromMicrosoft {
                                 Date = Get-Date $date -ErrorAction SilentlyContinue
                                 ClientOS = $ClientOS
                                 ServerOS = $ServerOS
-                                Type = $type
+                                PatchType = $type
                             }
                             
                             # Add this individual build entry to the results
