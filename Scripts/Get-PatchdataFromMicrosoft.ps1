@@ -21,7 +21,9 @@ Function Get-PatchdataFromMicrosoft {
             ClientOS = Windows 10 1809
             ServerOS = Windows Server 2019
             Type = Patch Tuesday
-                
+    
+    Version 2.0.1
+        Fixed output to "Patch Tuesday" instead of "PatchTuesday"
     Version 2.0
         Reimplemented parsing logic using improved regex pattern from Parse-WindowsUpdates
         Streamlined the build number processing
@@ -103,8 +105,8 @@ Function Get-PatchdataFromMicrosoft {
                 $type = if ($match.Groups['type'].Success -and -not [string]::IsNullOrWhiteSpace($match.Groups['type'].Value)) { 
                     $match.Groups['type'].Value.Trim() 
                 } else { 
-                    "PatchTuesday" 
-                }
+                    "Patch Tuesday"
+                    }
                 
                 # Process build numbers
                 # Replace "and" with commas to simplify splitting
